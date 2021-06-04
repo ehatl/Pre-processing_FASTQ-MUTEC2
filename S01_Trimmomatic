@@ -1,0 +1,20 @@
+#! /bin/bash
+
+#The Script is for clean Fastq file with Trimmomatics
+
+source /Path/for/config_file.sh
+
+#Input files
+Uno=$1
+Dos=$2
+
+#Change of names for Trimmomatic output files 
+Tres=`basename $Uno | sed 's/\.fastq\.gz/_paired\.fq\.gz/'`
+Cuatro=`basename $Uno | sed 's/\.fastq\.gz/_single\.fq\.gz/'`
+Cinco=`basename $Dos | sed 's/\.fastq\.gz/_paired\.fq\.gz/'`
+Seis=`basename $Dos | sed 's/\.fastq\.gz/_single\.fq\.gz/'`
+
+#Run Trimmomatic (you can use with samples of GENEWIZ and NOVOGEN because use a NOVAseq)
+$Trimmomatic $Uno $Dos ${TOut}${Tres} ${TOut}${Cuatro} ${TOut}${Cinco} ${TOut}${Seis} \
+ILLUMINACLIP:/home/programs/Trimmomatic-0.39/adapters/TruSeq3-PE-2.fa:2:30:10 \
+SLIDINGWINDOW:4:25 MINLEN:70 HEADCROP:10
