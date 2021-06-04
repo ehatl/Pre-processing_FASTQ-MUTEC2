@@ -1,24 +1,30 @@
 #! /bin/bash
 
-source /media/citogenetica/Alfredo_Disk/May_Mouse_MS_2021/Scripts_files/config_file.sh
+#This pipeline is for Aligments files with the References,
+#transform SAM to BAM, Sort and Merge BAMs files and 
+#finally add ReadsGroups
+#I follow the Best Practices of GATK 4 for Mutect2
 
-#Entrada de los archivos a analizar
+source /Path/to/config_file.sh
+
+#Input Files
 Uno=${1}
 Dos=${2}
 Tres=${3}
 Cuatro=${4}
 
-######## Alineamiento de archivos ############
-#Cambio de nombres para generar los archivos SAM
+######## Alignment Files wit BWA-mem ############
+
+#Change names for SAM output files
 SAMoutp=`basename ${Uno} | sed 's/_R1_001_paired\.fq\.gz/_paired\.sam/'`
 SAMoutsR1=`basename ${Uno} | sed 's/_R1_001_paired\.fq\.gz/_R1_single\.sam/'`
 SAMoutsR2=`basename ${Dos} | sed 's/_R2_001_paired\.fq\.gz/_R2_single\.sam/'`
 
 
-#Ejecutar bwa con sus parametros
-#Alineamieto pareado
+#Run BWA-mem
+#Alignment for Paired read of Trimmomatic output
 ${BWA} -t ${NT} ${GenomeREF} ${FILTERFQ}"/"${Uno} ${FILTERFQ}"/"${Dos} -o ${PATHBAM}"/"${SAMoutp}
-#Alineamiento de los no pareados
+#Alignment for Paired read of Trimmomatic output
 ${BWA} -t ${NT} ${GenomeREF} ${FILTERFQ}"/"${Tres} -o ${PATHBAM}"/"${SAMoutsR1}
 ${BWA} -t ${NT} ${GenomeREF} ${FILTERFQ}"/"${Cuatro} -o ${PATHBAM}"/"${SAMoutsR2}
 
